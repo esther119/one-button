@@ -1,21 +1,6 @@
 const TreasureChest = () => {
   return (
-    <div className="relative">
-      {/* <div id="sliders">
-        <div id="slider-cont">
-          <label for="x-slider">
-            <span>Rotate X </span>
-            <span id="x-deg"></span>
-          </label>
-          <input id="x-slider" type="range" min="0" max="360" value="350" />
-          <label for="y-slider">
-            <span>Rotate Y </span>
-            <span id="y-deg"></span>
-          </label>
-          <input id="y-slider" type="range" min="0" max="360" value="330" />
-        </div>
-      </div> */}
-      <input type="checkbox" id="toggle-treasure" />
+    <div>
       <div id="treasure-chest-positioner">
         <label id="treasure-chest" for="toggle-treasure">
           <div id="lid">
