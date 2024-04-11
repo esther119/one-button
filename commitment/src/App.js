@@ -33,7 +33,7 @@ const CustomNodeFlow = () => {
             width: 300,
           },
         },
-        position: { x: 0, y: 0 },
+        position: { x: 300, y: 300 },
       },
     ]);
   }, [setNodes]);
@@ -59,8 +59,6 @@ const CustomNodeFlow = () => {
         snapToGrid={true}
         snapGrid={snapGrid}
         defaultViewport={defaultViewport}
-        connectable={false}
-        fitView
         attributionPosition="bottom-left"
       >
         <Controls />

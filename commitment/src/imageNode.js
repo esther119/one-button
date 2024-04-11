@@ -1,5 +1,3 @@
-// imageNode.js
-
 import React, { useState, memo } from "react";
 // import { Handle } from "react-flow-renderer";
 
@@ -7,9 +5,15 @@ const ImageNode = memo(({ data }) => {
   const { url, height, width } = data.image;
   const [text, setText] = useState("");
 
-  const handleInputChange = (event) => {
-    setText(event.target.value);
-  };
+  function handleInputChange(event) {
+    const textarea = event.target;
+    // Reset height to auto to ensure proper calculation of scrollHeight below
+    textarea.style.height = "auto";
+    // Set the height to scrollHeight to accommodate the content
+    textarea.style.height = `${textarea.scrollHeight}px`;
+    // Set state or perform other actions as needed
+    setText(event.target.value); // Assuming you're using React state
+  }
 
   return (
     <div
@@ -17,19 +21,24 @@ const ImageNode = memo(({ data }) => {
         position: "relative",
         width: `${width}px`,
         height: `${height}px`,
-        border: "1px solid #ccc",
       }}
     >
       <img src={url} alt="Node" style={{ width: "100%", height: "100%" }} />
-      <input
-        type="text"
+      <textarea
         value={text}
         onChange={handleInputChange}
         style={{
           position: "absolute",
-          bottom: "10px",
-          left: "10px",
-          width: "calc(100% - 20px)",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "60%",
+          textAlign: "center",
+          backgroundColor: "rgba(255, 255, 255, 0.3)",
+          padding: "8px",
+          resize: "none", // Prevents manual resizing
+          overflowY: "hidden", // Hides the vertical scrollbar
+          minHeight: "20px", // Initial height to approximate a single line, adjust as needed
         }}
       />
     </div>
