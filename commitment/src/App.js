@@ -1,18 +1,72 @@
-import "./App.css";
-import TreasureChest from "./box";
-import CollisionDetectionFlow from "./Collision";
+import React, { useEffect, useCallback } from "react";
+import ReactFlow, {
+  useNodesState,
+  useEdgesState,
+  addEdge,
+  Controls,
+} from "reactflow";
+import "reactflow/dist/style.css";
 
-function App() {
+import ImageNode from "./imageNode";
+
+const connectionLineStyle = { stroke: "#fff" };
+const snapGrid = [20, 20];
+const nodeTypes = {
+  imageNode: ImageNode,
+};
+
+const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
+
+const CustomNodeFlow = () => {
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
+  useEffect(() => {
+    setNodes([
+      {
+        id: "2",
+        type: "imageNode",
+        data: {
+          image: {
+            url: "/scroll.png",
+            height: 400,
+            width: 300,
+          },
+        },
+        position: { x: 0, y: 0 },
+      },
+    ]);
+  }, [setNodes]);
+
+  const onConnect = useCallback(
+    (params) =>
+      setEdges((eds) =>
+        addEdge({ ...params, animated: true, style: { stroke: "#fff" } }, eds)
+      ),
+    [setEdges]
+  );
+
   return (
-    <div className="App flex flex-col h-screen justify-between">
-      {/* <h1 className="text-3xl font-bold underline mt-96">Hello world!</h1> */}
-      <CollisionDetectionFlow></CollisionDetectionFlow>
-      <div className="flex justify-center items-center mt-4 mb-4">
-        {/* <img src="/scroll.png" alt="scroll" class="absolute-width-96 h-auto" /> */}
-      </div>
-      <TreasureChest></TreasureChest>
+    <div style={{ height: 800, width: 1500 }}>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        // onConnect={onConnect}
+        nodeTypes={nodeTypes}
+        connectionLineStyle={connectionLineStyle}
+        snapToGrid={true}
+        snapGrid={snapGrid}
+        defaultViewport={defaultViewport}
+        connectable={false}
+        fitView
+        attributionPosition="bottom-left"
+      >
+        <Controls />
+      </ReactFlow>
     </div>
   );
-}
+};
 
-export default App;
+export default CustomNodeFlow;
