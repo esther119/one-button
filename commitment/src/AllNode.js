@@ -43,14 +43,14 @@ const AllNode = () => {
         id: "2",
         type: "treasureBox",
         data: { content: "hi" },
-        position: { x: 100, y: 550 },
+        position: { x: 100, y: 600 },
       },
     ]);
   }, [setNodes]);
 
   const onNodeDragStop = (event, node) => {
     console.log(`Node ${node.id} position:`, node.position);
-    if (node.id === "1" && node.position.y > 200 && node.position.x < 350) {
+    if (node.id === "1" && node.position.y > 250 && node.position.x < 400) {
       setNodes((currentNodes) => currentNodes.filter((n) => n.id !== "1"));
       playAudio();
     }
