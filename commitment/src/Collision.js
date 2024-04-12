@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import ReactFlow, { useNodesState, useEdgesState, Panel } from "reactflow";
 import CustomNode from "./CustomNode";
+import ImageNode from "./imageNode";
+import TreasureBoxNode from "./TreasureBoxNode";
 
 import {
   nodes as initialNodes,
@@ -14,9 +16,8 @@ const panelStyle = {
   fontSize: 12,
   color: "#777",
 };
-const nodeTypes = {
-  custom: CustomNode,
-};
+
+const nodeTypes = { imageNode: ImageNode, treasureBox: TreasureBoxNode };
 
 const CollisionDetectionFlow = () => {
   // this ref stores the current dragged node

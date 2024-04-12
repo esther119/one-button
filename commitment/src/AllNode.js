@@ -1,13 +1,7 @@
 // CustomNodeFlow.js
-import React, { useEffect, useCallback } from "react";
-import ReactFlow, {
-  useNodesState,
-  useEdgesState,
-  addEdge,
-  Controls,
-} from "reactflow";
+import React, { useEffect } from "react";
+import ReactFlow, { useNodesState, useEdgesState } from "reactflow";
 import "reactflow/dist/style.css";
-import BlueBox from "./bluebox";
 import ImageNode from "./imageNode"; // Adjust the path as necessary based on your project structure
 import TreasureBoxNode from "./TreasureBoxNode";
 
@@ -18,7 +12,14 @@ const nodeTypes = {
   treasureBox: TreasureBoxNode,
 };
 
-const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
+const defaultViewport = { x: 0, y: 0, zoom: 1 };
+const playAudio = () => {
+  const audio = new Audio("/box_closed_trim.mp3"); // Ensure the path to your audio file is correct
+  audio
+    .play()
+    .catch((error) => console.error("Error playing the audio file:", error));
+};
+const proOptions = { hideAttribution: true };
 
 const AllNode = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -36,64 +37,41 @@ const AllNode = () => {
             width: 300,
           },
         },
-        position: { x: 300, y: 0 },
+        position: { x: 50, y: 0 },
       },
       {
         id: "2",
         type: "treasureBox",
         data: { content: "hi" },
-        position: { x: 350, y: 550 },
+        position: { x: 100, y: 550 },
       },
     ]);
   }, [setNodes]);
 
-  // const onConnect = useCallback(
-  //   (params) =>
-  //     setEdges((eds) =>
-  //       addEdge({ ...params, animated: true, style: { stroke: "#fff" } }, eds)
-  //     ),
-  //   [setEdges]
-  // );
-  const handleNodesChange = useCallback((changes) => {
-    setNodes(
-      (nds) =>
-        nds
-          .map((node) => {
-            const change = changes.find((c) => c.id === node.id);
-            if (change) {
-              // For example, if an imageNode's y position is greater than 500, remove it
-              if (
-                node.type === "imageNode" &&
-                change.position &&
-                change.position.y > 500
-              ) {
-                return null; // Or mark it with a flag to conditionally render it
-              }
-              return { ...node, ...change };
-            }
-            return node;
-          })
-          .filter(Boolean) // Remove null values, effectively removing the node
-    );
-  }, []);
+  const onNodeDragStop = (event, node) => {
+    console.log(`Node ${node.id} position:`, node.position);
+    if (node.id === "1" && node.position.y > 200 && node.position.x < 350) {
+      setNodes((currentNodes) => currentNodes.filter((n) => n.id !== "1"));
+      playAudio();
+    }
+  };
 
   return (
-    <div style={{ height: 800, width: 1500 }}>
+    <div style={{ height: 677, width: 375 }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
-        // onNodesChange={handleNodesChange}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
         connectionLineStyle={connectionLineStyle}
         snapToGrid={true}
         snapGrid={snapGrid}
         defaultViewport={defaultViewport}
-        attributionPosition="bottom-left"
-      >
-        {/* <Controls /> */}
-      </ReactFlow>
+        onNodeDragStop={onNodeDragStop}
+        proOptions={proOptions}
+        fitView
+      ></ReactFlow>
     </div>
   );
 };
